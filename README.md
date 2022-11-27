@@ -36,24 +36,33 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
 
 ### Deploying
 
-To deploy, run `npm run build` in the `ui` directory which will bundle all the code and assets into the `dist/` folder. This can then be made into a glob by doing the following:
+- bash: `cd ui && npm install && npm run build` to install ui deps & build a prod bundle in `ui/dist`
+- bash: `bash start-fake-ship.sh` to create or launch a fake urbit ship
+- dojo: `|merge %work our %base` to create a new work desk (aka repo) from a fork of the built-in base desk
+- dojo: `|mount %work` to make our work desk accessible from the host filesystem at `data/zod/work` where `data/zod` is the fake urbit's pier.
+- bash: `rsync -avL --delete ui/dist/ data/zod/work/flashcards` to copy prod js bundle into the urbit work desk
+- dojo: `|commit %work` to import filesystem changes into urbit, you should see new files logged in dojo
+- dojo: `=dir /=garden=` to change to the garden desk, arg to `=dir` (aka `cd`) is a 3-part `beak` (like a `path`) composed of the ship, desk, and revision (`=` for any of these three uses the default value)
+- dojo: `-make-glob %work /flashcards` to call the `-make-glob` utility function that the garden desk provides, this util groups files from the flashcards dir of the work desk into one file & puts that file into the host filesystem at `data/zod/.urb/put/`. The file name looks like `glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob` where the characters between `glob-` and `.glob` are a hash of the glob's contents.
+- bash: `bash publish.sh data/zod/.urb/put/glob-0v1.hgamp.m7c2c.bomag.81l5r.d71h6.glob $BLOG_URL/ipfs` to upload the glob to ipfs
+  - where `$BLOG_URL` can include a username and password eg `https://admin:password@myblog.com`
+  - change the glob name to one from your own `zod/.urb/put` dir
+- bash: `vim desk/desk.docket-0`
+  - Both the full URL and the hash of the `glob-http` key should be updated to match the glob we just created
+  - That line should look something like this when you're done: `glob-http+['https://myblog.com/ipfs/Qmabc123' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]`
+  - Update info & other stuff if needed
+- dojo: `|merge %flashcards our %garden` to create new production desk, we need to use garden as the base bc it has necessary libs
+- dojo: `|mount %flashcards` to make prod desk available for update via the host fs
+- bash: `cp -f desk/* data/zod/flashcards/` to copy our updated docket into the prod desk
+- dojo: `|commit %flashcards` to load fs updates into urbit
+- dojo: `|install our %flashcards` to activate this desk as an app
+- browser: visit the globulator at http://localhost:8080/docket/upload (notice we're bypassing usual frontend & talking straight to urbit server at port 8080)
+  - select `flashcards` for the desk
+  - give the path to flashcards/ui/dist for the data
+  - glob it
+  - TODO: figure out what this step does & whether it can be skipped
+- browser: visit your homepage at http://localhost:3000 and explore your newly installed app (notice port 3000 means we're back to usual frontend)
 
-1. Create or launch an urbit by running `bash start-fake-ship.sh`
-2. On that urbit, if you don't already have a desk to run from, run `|merge %work our %base` to create a new desk and mount it with `|mount %work`.
-3. Now the `%work` desk is accessible through the host OS's filesystem as a directory of that urbit's pier ie `~/zod/work`.
-4. From the `ui` directory you can run `rsync -avL --delete dist/ ~/zod/work/flashcards` where `~/zod` is your fake urbit's pier.
-5. Once completed you can then run `|commit %work` on your urbit and you should see your files logged back out from the dojo.
-6. Now run `=dir /=garden=` to switch to the garden desk directory
-7. You can now run `-make-glob %work /flashcards` which will take the folder where you just added files and create a glob which can be thought of as a sort of bundle. It will be output to `~/zod/.urb/put`.
-8. If you navigate to `~/zod/.urb/put` you should see a file that looks like this `glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob`. The characters between `glob-` and `.glob` are a hash of the glob's contents.
-9. Now that we have the glob it can be uploaded to any publicly available HTTP endpoint that can serve files. This allows the glob to distributed over HTTP.
-10. Once you've uploaded the glob, you should then update the corresponding entry in the docket file at `desk/desk.docket-0`. Both the full URL and the hash should be updated to match the glob we just created, on the line that looks like this:
-
-```hoon
-    glob-http+['https://bootstrap.urbit.org/glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]
-```
-
-11. This can now be safely committed and deployed.
 
 [react]: https://reactjs.org/
 [typescript]: https://www.typescriptlang.org/
