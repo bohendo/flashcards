@@ -54,6 +54,7 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
 - dojo: `|merge %flashcards our %garden` to create new production desk, we need to use garden as the base bc it has necessary libs
 - dojo: `|mount %flashcards` to make prod desk available for update via the host fs
 - bash: `cp -f desk/* data/zod/flashcards/` to copy our updated docket into the prod desk
+- bash: `rsync -avL --delete ui/dist/ data/zod/flashcards/flashcards` to copy prod js bundle into the prod desk
 - dojo: `|commit %flashcards` to load fs updates into urbit
 - dojo: `|install our %flashcards` to activate this desk as an app
 - browser: visit the globulator at http://localhost:8080/docket/upload (notice we're bypassing usual frontend & talking straight to urbit server at port 8080)
@@ -62,6 +63,8 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
   - glob it
   - TODO: figure out what this step does & whether it can be skipped
 - browser: visit your homepage at http://localhost:3000 and explore your newly installed app (notice port 3000 means we're back to usual frontend)
+
+[Other docs](https://developers.urbit.org/guides/core/app-school-full-stack/8-desk) to check out if the above doesn't work..
 
 
 [react]: https://reactjs.org/
