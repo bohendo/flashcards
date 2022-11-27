@@ -1,7 +1,7 @@
 :~  title+'Flashcards'
     info+'An Urbit app for rote learning via spaced repetition'
     color+0x2e.4347
-    glob-http+['https://bohendo.com/ipfs/QmQ3f7DGvjQHDXEWWjvmWSNkspf5Ht2Z7M6cze6hxRKpsB' 0v1.hgamp.m7c2c.bombg.80l5r.d61h6]
+    glob-http+['https://bohendo.com/ipfs/QmUvaNmd9o9bEt2CXviWCnDowGTKvVAFm8YXyTWR3fVFz3' 0v4.vvo27.juisg.sff0n.q8vmb.704mp]
     base+'flashcards'
     version+[0 0 1]
     website+'https://git.bohendo.com/projects/32'
