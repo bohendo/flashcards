@@ -14,8 +14,18 @@ then
     cp -r "$snapshot" "$name"
     urbit zod
   else
-    echo "Booting a new urbit, press ctrl-d immediately after it finishes booting then re-run this script to quickly restart from a fresh snapshot"
-    urbit -F "$name" -c "$snapshot"
+    echo "Booting a new urbit to use as a quick-start snapshot.."
+    echo "Once this ship boots, run the following commands then hit ctrl-d to exit the console"
+    echo "~zod:dojo> |mount %base" # generic boilerplate (like what you get after `git init`)
+    echo "~zod:dojo> |mount %garden" # landscape server
+    echo "~zod:dojo> |mount %landscape" # landscape gui
+    echo "~zod:dojo> |mount %bitcoin" # bitcoin wallet app
+    echo "~zod:dojo> |mount %webterm" # in-browser dojo terminal app
+    echo "~zod:dojo> <ctrl-d>"
+    echo "Then, re-run this script to start a fresh zod ship from the generated snapshot"
+    echo
+    sleep 3 # give the user a sec to read the message above
+    urbit -F "$name" -c "$snapshot" # warning: takes ~2 minutes & lots of cpu
   fi
 elif [[ -n "$(command -v docker)" ]]
 then
