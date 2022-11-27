@@ -43,7 +43,7 @@ To deploy, run `npm run build` in the `ui` directory which will bundle all the c
 3. Now the `%work` desk is accessible through the host OS's filesystem as a directory of that urbit's pier ie `~/zod/work`.
 4. From the `ui` directory you can run `rsync -avL --delete dist/ ~/zod/work/flashcards` where `~/zod` is your fake urbit's pier.
 5. Once completed you can then run `|commit %work` on your urbit and you should see your files logged back out from the dojo.
-6. Now run `=dir /=garden` to switch to the garden desk directory
+6. Now run `=dir /=garden=` to switch to the garden desk directory
 7. You can now run `-make-glob %work /flashcards` which will take the folder where you just added files and create a glob which can be thought of as a sort of bundle. It will be output to `~/zod/.urb/put`.
 8. If you navigate to `~/zod/.urb/put` you should see a file that looks like this `glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob`. The characters between `glob-` and `.glob` are a hash of the glob's contents.
 9. Now that we have the glob it can be uploaded to any publicly available HTTP endpoint that can serve files. This allows the glob to distributed over HTTP.
