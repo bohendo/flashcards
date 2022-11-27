@@ -36,8 +36,10 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
 
 ### Deploying
 
+Note: the dev server runs on port 3000 but, while deploying, we'll be talking directly to the urbit server at port 8080.
+
 - bash: `bash start-fake-ship.sh` to create or launch a fake urbit ship, keep this terminal open & use it to enter all dojo commands
-- dojo: `+code` to generate an access code, visit `http://localhost:3000` and enter this code to login.
+- dojo: `+code` to generate an access code, visit `http://localhost:8080` and enter this code to login.
 - bash: `cd ui && npm install && npm run build` to install ui deps & build a prod bundle in `ui/dist` (from a 2nd terminal tab bc first one should still have dojo open)
 - dojo: `|merge %work our %base` to create a new work desk (aka repo) from a fork of the built-in base desk
 - dojo: `|mount %work` to make our work desk accessible from the host filesystem at `data/zod/work` where `data/zod` is the fake urbit's pier.
@@ -58,7 +60,7 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
 - bash: `rsync -avL --delete ui/dist/ data/zod/flashcards/flashcards` to copy prod js bundle into the prod desk
 - dojo: `|commit %flashcards` to load fs updates into urbit
 - dojo: `|install our %flashcards` to activate this desk as an app
-- browser: visit your homepage at http://localhost:3000 and explore your newly installed app (notice port 3000 means we're back to usual frontend)
+- browser: visit your homepage at http://localhost:8080 and explore your newly installed app
 
 [Other docs](https://developers.urbit.org/guides/core/app-school-full-stack/8-desk) to check out if the above doesn't work..
 
