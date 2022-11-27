@@ -38,7 +38,7 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
 
 To deploy, run `npm run build` in the `ui` directory which will bundle all the code and assets into the `dist/` folder. This can then be made into a glob by doing the following:
 
-1. Create or launch an urbit using the -F flag
+1. Create or launch an urbit by running `bash start-fake-ship.sh`
 2. On that urbit, if you don't already have a desk to run from, run `|merge %work our %base` to create a new desk and mount it with `|mount %work`.
 3. Now the `%work` desk is accessible through the host OS's filesystem as a directory of that urbit's pier ie `~/zod/work`.
 4. From the `ui` directory you can run `rsync -avL --delete dist/ ~/zod/work/flashcards` where `~/zod` is your fake urbit's pier.
