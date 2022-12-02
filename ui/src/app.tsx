@@ -13,6 +13,9 @@ const getRandomColor = () => {
 
 export function App() {
   const [apps, setApps] = useState<Charges>();
+  const handleNext = () => {
+    console.log("handling")
+  }
 
   const charList = [
     {
@@ -46,6 +49,9 @@ export function App() {
       <div className="block justify-center items-center max-w-md space-y-6 py-20">
         <h1 className="text-3xl font-bold">Welcome to flashcards</h1>
         <CharTile {...charList[Math.floor(Math.random() * 3)]} />
+        <button className="rounded-xl p-1 justify-center"
+          style={{ backgroundColor: "pink" }}
+          onClick={handleNext}> Next ▶</button>
       </div>
     </main>
   );

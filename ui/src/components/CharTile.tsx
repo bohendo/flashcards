@@ -7,13 +7,18 @@ export const CharTile = (tile: {
 }) => {
 
     const [isFlipped, setFlipped] = useState(false);
-    const [rotation, setRotation] = useState(0);
+    const [difficulty, setDifficulty] = useState(0);
 
     const frontRotateY = `rotateY(${ isFlipped ? 180 : 0 }deg)`;
     const backRotateY = `rotateY(${ isFlipped ? 0 : -180 }deg)`;
     const frontRotateX = `rotateX(${ isFlipped ? 180 : 0 }deg)`;
     const backRotateX = `rotateX(${ isFlipped ? 0 : -180 }deg)`;
     
+    const handleDifficultyChange = (event: React.MouseEvent<HTMLDivElement>) => {
+        const star = Number(event.currentTarget.dataset.star);
+        setDifficulty(star);
+    };
+
     const styles: any = {
         back: {
           backgroundColor: tile.color,
@@ -53,11 +58,11 @@ export const CharTile = (tile: {
       };
 
     return (
-        <div className="relative" style={styles.flipper} onClick={()=> setFlipped(!isFlipped)}>
-
+        <div className="relative" style={styles.flipper}>
             <div
                 className="block relative w-32 h-32 rounded-lg bg-gray-200 overflow-hidden"
                 style={styles.front}
+                onClick={()=> setFlipped(!isFlipped)}
             >
                 <div className="flex items-center justify-center mt-1">
                     <h1 className="text-md font-bold">
@@ -65,19 +70,38 @@ export const CharTile = (tile: {
                     </h1>
                 </div>
 
-                <div className="flex items-center justify-center mt-5">
+                <div className="flex items-center justify-center m-5">
                     <h1 className="text-3xl font-bold">
                         {tile.character}
                     </h1>
                 </div>
             </div>
-            <div style={styles.back}>
+            <div style={styles.back} onClick={()=> setFlipped(!isFlipped)}>
+                <div className="flex items-center justify-center mt-1">
+                    <h1 className="text-md font-bold">
+                        Name
+                    </h1>
+                </div>
                 <div className="flex items-center justify-center mt-5">
                     <h1 className="text-3xl font-bold">
                         {tile.name}
                     </h1>
-                </div> 
+                </div>
             </div>
+            {
+                isFlipped ?
+                <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                        <div key={star} data-star={star} onClick={handleDifficultyChange}
+                            className={`star ${star <= difficulty ? "selected" : ""}`}
+                        >
+                            &#9733;
+                        </div>
+                    ))}
+                </div>
+                : null
+            }
+          
         </div>
     )
 }
