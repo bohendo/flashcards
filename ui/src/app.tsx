@@ -2,43 +2,33 @@ import React, { useEffect, useState } from 'react';
 import Urbit from '@urbit/http-api';
 import { Charges, ChargeUpdateInitial, scryCharges } from '@urbit/api';
 import { CharTile } from './components/CharTile';
+import { charList } from './rune';
 
 const api = new Urbit('', '', window.desk);
 api.ship = window.ship;
 
-const getRandomColor = () => {
-  const colorList = ["#e3f2fd", "#f3e5f5", "#e57373", "#ffb74d", "#4fc3f7", "#81c784"]
-  return colorList[Math.floor(Math.random() * 6 )]
-}
-
 export function App() {
-  const [apps, setApps] = useState<Charges>();
-  const handleNext = () => {
-    console.log("handling")
-  }
+  const [currentChallenge, setCurrentChallenge] = useState({} as charList);
+  const [newChallenges, setNewChallenges] = useState(JSON.parse(JSON.stringify(charList)));
+  const [oldChallenges, setOldChallenges] = useState(Array<charList>);
 
-  const charList = [
-    {
-      name: "ace",
-      character: "␣",
-      color: getRandomColor()
-    },
-    {
-      name: "bar",
-      character: "|",
-      color: getRandomColor()
-    },
-    {
-      name: "bas",
-      character: "\\",
-      color: getRandomColor()
+  const handleNext = () => {
+    if (newChallenges.length === 1) {
+      setCurrentChallenge(newChallenges[0]);
+      setNewChallenges(JSON.parse(JSON.stringify(charList)));
+      setOldChallenges([] as Array<charList>);
+      return;
     }
-  ]
+    const index = Math.floor(Math.random() * newChallenges.length);
+    const challenge = newChallenges[index];
+    setCurrentChallenge(challenge);
+    setNewChallenges(newChallenges.filter((_: any,i: number)=> i !== index));
+    setOldChallenges(oldChallenges.concat(challenge));
+  }
 
   useEffect(() => {
     async function init() {
-      const charges = (await api.scry<ChargeUpdateInitial>(scryCharges)).initial;
-      setApps(charges);
+      handleNext();
     }
 
     init();
@@ -48,7 +38,7 @@ export function App() {
     <main className="flex items-center justify-center min-h-screen">
       <div className="block justify-center items-center max-w-md space-y-6 py-20">
         <h1 className="text-3xl font-bold">Welcome to flashcards</h1>
-        <CharTile {...charList[Math.floor(Math.random() * 3)]} />
+        <CharTile {...currentChallenge} />
         <button className="rounded-xl p-1 justify-center"
           style={{ backgroundColor: "pink" }}
           onClick={handleNext}> Next ▶</button>

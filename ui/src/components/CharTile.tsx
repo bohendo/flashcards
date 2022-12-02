@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
+import { charList } from '../rune';
 
-export const CharTile = (tile: {
-    name: string,
-    character: string,
-    color: string
-}) => {
+export const CharTile = (tile: charList) => {
 
     const [isFlipped, setFlipped] = useState(false);
     const [difficulty, setDifficulty] = useState(0);
 
-    const frontRotateY = `rotateY(${ isFlipped ? 180 : 0 }deg)`;
-    const backRotateY = `rotateY(${ isFlipped ? 0 : -180 }deg)`;
     const frontRotateX = `rotateX(${ isFlipped ? 180 : 0 }deg)`;
     const backRotateX = `rotateX(${ isFlipped ? 0 : -180 }deg)`;
     
@@ -31,10 +26,10 @@ export const CharTile = (tile: {
           transform: backRotateX,
           transformStyle: 'preserve-3d',
           transition: '0.5s',
-          width: '100%',
+          width: '60%',
         },
         container: {
-          perspective: '1000px',
+          perspective: '100px',
         },
         flipper: {
           height: '100%',
@@ -52,7 +47,7 @@ export const CharTile = (tile: {
           transform: frontRotateX,
           transformStyle: 'preserve-3d',
           transition: '0.5s',
-          width: '100%',
+          width: '60%',
           zIndex: '2',
         },
       };
@@ -91,6 +86,7 @@ export const CharTile = (tile: {
             {
                 isFlipped ?
                 <div className="flex">
+                    <label> Difficulty: &nbsp; </label>
                     {[1, 2, 3, 4, 5].map((star) => (
                         <div key={star} data-star={star} onClick={handleDifficultyChange}
                             className={`star ${star <= difficulty ? "selected" : ""}`}
