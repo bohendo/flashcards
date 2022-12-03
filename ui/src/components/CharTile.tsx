@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { charList } from '../rune';
 
-export const CharTile = (tile: charList) => {
+export const CharTile = (props: {tile: charList, isFlipped: boolean}) => {
 
-    const [isFlipped, setFlipped] = useState(false);
+    const { tile, isFlipped } = props;
     const [difficulty, setDifficulty] = useState(0);
 
     const frontRotateX = `rotateX(${ isFlipped ? 180 : 0 }deg)`;
@@ -27,6 +27,7 @@ export const CharTile = (tile: charList) => {
           transformStyle: 'preserve-3d',
           transition: '0.5s',
           width: '60%',
+          zIndex: '2',
         },
         container: {
           perspective: '100px',
@@ -57,7 +58,6 @@ export const CharTile = (tile: charList) => {
             <div
                 className="block relative w-32 h-32 rounded-lg bg-gray-200 overflow-hidden"
                 style={styles.front}
-                onClick={()=> setFlipped(!isFlipped)}
             >
                 <div className="flex items-center justify-center mt-1">
                     <h1 className="text-md font-bold">
@@ -71,7 +71,10 @@ export const CharTile = (tile: charList) => {
                     </h1>
                 </div>
             </div>
-            <div style={styles.back} onClick={()=> setFlipped(!isFlipped)}>
+            <div
+                className="block relative w-32 h-32 rounded-lg bg-gray-200 overflow-hidden"
+                style={styles.back}
+            >
                 <div className="flex items-center justify-center mt-1">
                     <h1 className="text-md font-bold">
                         Name
