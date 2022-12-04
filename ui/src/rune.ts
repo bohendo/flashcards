@@ -14,7 +14,7 @@ const getColor = (key: string): string => {
   return color;
 }
 
-export const runeDeck = [
+export const getRuneDeck = () => (JSON.parse(JSON.stringify([
   {
     name: "ace",
     character: "␣",
@@ -151,8 +151,9 @@ export const runeDeck = [
     name: "gal",
     character: "<",
   },
-].map(card => ({
+])) as Array<{ name: string; character: string; }>).map(card => ({
   character: card.character,
   name: card.name,
   color: getColor(card.character),
+  difficulty: 100,
 })) as Deck;

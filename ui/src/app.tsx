@@ -2,32 +2,69 @@ import React, { useEffect, useState } from 'react';
 import Urbit from '@urbit/http-api';
 import { Charges, ChargeUpdateInitial, scryCharges } from '@urbit/api';
 import { CharTile } from './components/CharTile';
-import { runeDeck } from './rune';
+import { getRuneDeck } from './rune';
 
 import { Card, Deck } from './types';
 
 const api = new Urbit('', '', window.desk);
 api.ship = window.ship;
 
-export function App() {
-  const [currentCard, setCurrentCard] = useState({} as Card);
-  const [currentDeck, setCurrentDeck] = useState(JSON.parse(JSON.stringify(runeDeck)));
-  const [discardDeck, setDiscardDeck] = useState([] as Deck);
+const shuffle = (deck: Deck): Deck => {
+  const shuffled = [...deck];
+  for (let i = 0; i < shuffled.length; i++) {
+    const r = Math.floor(Math.random() * shuffled.length);
+    const tmp = shuffled[i]
+    shuffled[i] = shuffled[r]
+    shuffled[r] = tmp;
+  }
+  return shuffled;
+};
+
+// sorted by decreasing difficulty
+// ties are randomized
+const sortByDifficulty = (deck: Deck): Deck => {
+  const groupedByDif = {} as any;
+  for (let i = 0; i < deck.length; i++) {
+    const dif = deck[i].difficulty.toString();
+    if (!groupedByDif[dif]) groupedByDif[dif] = [];
+    groupedByDif[dif].push(deck[i]);
+  }
+  const difficulties = Object.keys(groupedByDif).sort((a, b) => parseInt(b) - parseInt(a));
+  const sorted = [] as Deck;
+  for (let i = 0; i < difficulties.length; i++) {
+    const difficulty = difficulties[i];
+    sorted.push(...shuffle(groupedByDif[difficulty]));
+  }
+  return sorted;
+};
+
+const getMyDeck = (): Deck => {
+  return JSON.parse((localStorage.getItem(HOON_DECK)) as Deck) || getRuneDeck();
+};
+
+const setMyDeck = (deck: Deck): void => {
+  return localStorage.setItem(HOON_DECK, JSON.stringify(deck || []));
+};
+
+const HOON_DECK = "HOON_DECK"
+
+export const App = () => {
+  const [currentCard, setCurrentCard] = useState(0);
+  const [currentDeck, setCurrentDeck] = useState(getMyDeck());
   const [isFlipped, setFlipped] = useState(false);
+
+  useEffect(() => {
+    const newDeck = sortByDifficulty(getRuneDeck()).slice(0, 16);
+    console.log(`Sorted deck:`, newDeck);
+    setCurrentDeck(newDeck);
+    setCurrentCard(0);
+  }, []);
 
   const handleNext = () => {
     setFlipped(false);
-    if (currentDeck.length === 1) {
-      setCurrentCard(currentDeck[0]);
-      setCurrentDeck(JSON.parse(JSON.stringify(runeDeck)));
-      setDiscardDeck([] as Deck);
-      return;
-    }
-    const index = Math.floor(Math.random() * currentDeck.length);
-    const challenge = currentDeck[index];
-    setCurrentCard(challenge);
-    setCurrentDeck(currentDeck.filter((_: any,i: number)=> i !== index));
-    setDiscardDeck(discardDeck.concat(challenge));
+    let newCard = currentCard + 1;
+    if (newCard > currentDeck.length - 1) newCard = 0; // wrap back to beginning
+    setCurrentCard(newCard);
   }
 
   enum Difficulty {
@@ -36,23 +73,27 @@ export function App() {
     Hard = 'hard'
   };
 
-  const setDifficulty = (diffculty: Difficulty) => {
-    console.log(`Difficulty set to ${diffculty}`);
+  const setDifficulty = (difficulty: Difficulty) => {
+    console.log(`Difficulty set to ${difficulty}`);
+    const diffDiff = difficulty === Difficulty.Easy ? -10
+      : difficulty === Difficulty.Medium ? -2
+      : +2; // Hard
+    const newDiff = currentDeck[currentCard].difficulty + diffDiff;
+    const newDeck = [
+      ...currentDeck.slice(0, currentCard),
+      { ...currentCard, difficulty: newDiff },
+      ...currentDeck.slice(currentCard + 1)
+    ];
+    setMyDeck(newDeck);
+    setCurrentDeck(newDeck);
     handleNext();
   }
-
-  useEffect(() => {
-    (async () => {
-      handleNext();
-    })();
-
-  }, []);
 
   return (
     <main className="flex items-center justify-center min-h-screen">
       <div className="block justify-center items-center max-w-md space-y-6 py-20">
         <h1 className="text-3xl font-bold">Welcome to flashcards</h1>
-        <CharTile tile={currentCard} isFlipped={isFlipped} setFlipped={setFlipped} />
+        <CharTile card={currentDeck[currentCard]} isFlipped={isFlipped} setFlipped={setFlipped} />
         {
           isFlipped ?
           <div className="flex">
