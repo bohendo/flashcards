@@ -8,7 +8,7 @@ TODO: Add further documentation on beginning Hoon development
 
 ## UI
 
-flashcards is built primarily using [React], [Typescript], and [Tailwind CSS]. [Vite] ensures that all code and assets are loaded appropriately, bundles the application for distribution and provides a functional dev environment.
+flashcards is built primarily using [React], JavaScript, and [Tailwind CSS]. [Vite] ensures that all code and assets are loaded appropriately, bundles the application for distribution and provides a functional dev environment.
 
 ### Getting Started
 
@@ -65,6 +65,5 @@ Note: the dev server runs on port 3000 but, while deploying, we'll be talking di
 [Other docs](https://developers.urbit.org/guides/core/app-school-full-stack/8-desk) to check out if the above doesn't work..
 
 [react]: https://reactjs.org/
-[typescript]: https://www.typescriptlang.org/
 [tailwind css]: https://tailwindcss.com/
 [vite]: https://vitejs.dev/

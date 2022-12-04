@@ -44,8 +44,8 @@ elif [[ -n "$(command -v docker)" ]]
 then
   image="tloncorp/urbit:v1.12"
   echo "Starting urbit via docker image: $image"
-  docker image pull "$image"
-  docker run --interactive --tty --rm --name=fakezod "--mount=$data:/urbit" "--publish=8080:8080" "$image" --fake zod
+  # docker image pull "$image"
+  docker run --interactive --tty --rm --name=fakezod "--mount=type=bind,src=$data,dst=/urbit" "--publish=8080:80" "$image" urbit zod
 
 else
   echo "Neither urbit nor docker is installed, can't start a fake ship" && exit 1
