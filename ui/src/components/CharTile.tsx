@@ -27,6 +27,7 @@ export const CharTile = (tile: charList) => {
           transformStyle: 'preserve-3d',
           transition: '0.5s',
           width: '60%',
+          zIndex: '2',
         },
         container: {
           perspective: '100px',
@@ -71,7 +72,11 @@ export const CharTile = (tile: charList) => {
                     </h1>
                 </div>
             </div>
-            <div style={styles.back} onClick={()=> setFlipped(!isFlipped)}>
+            <div
+                className="block relative w-32 h-32 rounded-lg bg-gray-200 overflow-hidden"
+                style={styles.back}
+                onClick={()=> setFlipped(!isFlipped)}
+            >
                 <div className="flex items-center justify-center mt-1">
                     <h1 className="text-md font-bold">
                         Name
