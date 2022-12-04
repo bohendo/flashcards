@@ -2,34 +2,32 @@ import React, { useEffect, useState } from 'react';
 import Urbit from '@urbit/http-api';
 import { Charges, ChargeUpdateInitial, scryCharges } from '@urbit/api';
 import { CharTile } from './components/CharTile';
-import { charList } from './rune';
+import { runeDeck } from './rune';
 
-import { CharList } from './types';
+import { Card, Deck } from './types';
 
 const api = new Urbit('', '', window.desk);
 api.ship = window.ship;
 
 export function App() {
-  const [allChallenges, setAllChallenges] = useState(JSON.parse(JSON.stringify(charList)));
-
-  const [currentChallenge, setCurrentChallenge] = useState({} as CharList);
-  const [newChallenges, setNewChallenges] = useState(JSON.parse(JSON.stringify(charList)));
-  const [oldChallenges, setOldChallenges] = useState([] as Array<CharList>);
+  const [currentCard, setCurrentCard] = useState({} as Card);
+  const [currentDeck, setCurrentDeck] = useState(JSON.parse(JSON.stringify(runeDeck)));
+  const [discardDeck, setDiscardDeck] = useState([] as Deck);
   const [isFlipped, setFlipped] = useState(false);
 
   const handleNext = () => {
     setFlipped(false);
-    if (newChallenges.length === 1) {
-      setCurrentChallenge(newChallenges[0]);
-      setNewChallenges(JSON.parse(JSON.stringify(charList)));
-      setOldChallenges([] as Array<CharList>);
+    if (currentDeck.length === 1) {
+      setCurrentCard(currentDeck[0]);
+      setCurrentDeck(JSON.parse(JSON.stringify(runeDeck)));
+      setDiscardDeck([] as Deck);
       return;
     }
-    const index = Math.floor(Math.random() * newChallenges.length);
-    const challenge = newChallenges[index];
-    setCurrentChallenge(challenge);
-    setNewChallenges(newChallenges.filter((_: any,i: number)=> i !== index));
-    setOldChallenges(oldChallenges.concat(challenge));
+    const index = Math.floor(Math.random() * currentDeck.length);
+    const challenge = currentDeck[index];
+    setCurrentCard(challenge);
+    setCurrentDeck(currentDeck.filter((_: any,i: number)=> i !== index));
+    setDiscardDeck(discardDeck.concat(challenge));
   }
 
   enum Difficulty {
@@ -54,7 +52,7 @@ export function App() {
     <main className="flex items-center justify-center min-h-screen">
       <div className="block justify-center items-center max-w-md space-y-6 py-20">
         <h1 className="text-3xl font-bold">Welcome to flashcards</h1>
-        <CharTile tile={currentChallenge} isFlipped={isFlipped} setFlipped={setFlipped} />
+        <CharTile tile={currentCard} isFlipped={isFlipped} setFlipped={setFlipped} />
         {
           isFlipped ?
           <div className="flex">

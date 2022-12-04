@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { CharList } from '../types';
+import { Card } from '../types';
 
 export const CharTile = (props: {
-    tile: CharList,
+    tile: Card,
     isFlipped: boolean,
     setFlipped: (isFlipped: boolean) => void,
 }) => {

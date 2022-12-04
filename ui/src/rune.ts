@@ -1,6 +1,6 @@
 import * as eth from "ethers";
 
-import { CharList } from "./types";
+import { Deck } from "./types";
 
 const getColor = (key: string): string => {
   const seed = eth.utils.keccak256(eth.utils.toUtf8Bytes(key)); // use hash for deterministic randomness
@@ -14,7 +14,7 @@ const getColor = (key: string): string => {
   return color;
 }
 
-export const charList = [
+export const runeDeck = [
   {
     name: "ace",
     character: "␣",
@@ -155,4 +155,4 @@ export const charList = [
   character: card.character,
   name: card.name,
   color: getColor(card.character),
-})) as CharList[];
+})) as Deck;
