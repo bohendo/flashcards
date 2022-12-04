@@ -11,8 +11,10 @@ export function App() {
   const [currentChallenge, setCurrentChallenge] = useState({} as charList);
   const [newChallenges, setNewChallenges] = useState(JSON.parse(JSON.stringify(charList)));
   const [oldChallenges, setOldChallenges] = useState(Array<charList>);
+  const [isFlipped, setFlipped] = useState(false);
 
   const handleNext = () => {
+    setFlipped(false);
     if (newChallenges.length === 1) {
       setCurrentChallenge(newChallenges[0]);
       setNewChallenges(JSON.parse(JSON.stringify(charList)));
@@ -26,22 +28,47 @@ export function App() {
     setOldChallenges(oldChallenges.concat(challenge));
   }
 
-  useEffect(() => {
-    async function init() {
-      handleNext();
-    }
+  enum Difficulty {
+    Easy = 'easy',
+    Medium = 'medium',
+    Hard = 'hard'
+  };
 
-    init();
+  const setDifficulty = (diffculty: Difficulty) => {
+    console.log(`Difficulty set to ${diffculty}`);
+    handleNext();
+  }
+
+  useEffect(() => {
+    (async () => {
+      handleNext();
+    })();
+
   }, []);
 
   return (
     <main className="flex items-center justify-center min-h-screen">
       <div className="block justify-center items-center max-w-md space-y-6 py-20">
         <h1 className="text-3xl font-bold">Welcome to flashcards</h1>
-        <CharTile {...currentChallenge} />
-        <button className="rounded-xl p-1 justify-center"
-          style={{ backgroundColor: "pink" }}
-          onClick={handleNext}> Next ▶</button>
+        <CharTile tile={currentChallenge} isFlipped={isFlipped} setFlipped={setFlipped} />
+        {
+          isFlipped ?
+          <div className="flex">
+              <button className="rounded-xl mt-2 mr-2 p-1 justify-center"
+                  style={{ backgroundColor: "pink" }}
+                  onClick={() => setDifficulty(Difficulty.Easy)}
+              > Easy </button>
+              <button className="rounded-xl mt-2 mr-2 p-1 justify-center"
+                  style={{ backgroundColor: "pink" }}
+                  onClick={() => setDifficulty(Difficulty.Medium)}
+              > Medium </button>
+              <button className="rounded-xl mt-2 p-1 justify-center"
+                  style={{ backgroundColor: "pink" }}
+                  onClick={() => setDifficulty(Difficulty.Hard)}
+              > Hard </button>
+          </div>
+          : null
+        }
       </div>
     </main>
   );

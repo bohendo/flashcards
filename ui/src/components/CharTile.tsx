@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import { charList } from '../rune';
 
-export const CharTile = (tile: charList) => {
+export const CharTile = (props: {
+    tile: charList,
+    isFlipped: boolean,
+    setFlipped: (isFlipped: boolean) => void,
+}) => {
 
-    const [isFlipped, setFlipped] = useState(false);
-    const [difficulty, setDifficulty] = useState(0);
+    const { tile, isFlipped, setFlipped } = props;
 
     const frontRotateX = `rotateX(${ isFlipped ? 180 : 0 }deg)`;
     const backRotateX = `rotateX(${ isFlipped ? 0 : -180 }deg)`;
     
-    const handleDifficultyChange = (event: React.MouseEvent<HTMLDivElement>) => {
-        const star = Number(event.currentTarget.dataset.star);
-        setDifficulty(star);
-    };
-
     const styles: any = {
         back: {
           backgroundColor: tile.color,
@@ -88,21 +86,6 @@ export const CharTile = (tile: charList) => {
                     </h1>
                 </div>
             </div>
-            {
-                isFlipped ?
-                <div className="flex">
-                    <label> Difficulty: &nbsp; </label>
-                    {[1, 2, 3, 4, 5].map((star) => (
-                        <div key={star} data-star={star} onClick={handleDifficultyChange}
-                            className={`star ${star <= difficulty ? "selected" : ""}`}
-                        >
-                            &#9733;
-                        </div>
-                    ))}
-                </div>
-                : null
-            }
-          
         </div>
     )
 }
