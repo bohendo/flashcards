@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { charList } from '../rune';
+
+import { CharList } from '../types';
 
 export const CharTile = (props: {
-    tile: charList,
+    tile: CharList,
     isFlipped: boolean,
     setFlipped: (isFlipped: boolean) => void,
 }) => {
@@ -23,7 +24,7 @@ export const CharTile = (props: {
           top: '0',
           transform: backRotateX,
           transformStyle: 'preserve-3d',
-          transition: '0.5s',
+          transition: '0.0s',
           width: '60%',
           zIndex: '2',
         },

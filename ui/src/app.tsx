@@ -4,13 +4,17 @@ import { Charges, ChargeUpdateInitial, scryCharges } from '@urbit/api';
 import { CharTile } from './components/CharTile';
 import { charList } from './rune';
 
+import { CharList } from './types';
+
 const api = new Urbit('', '', window.desk);
 api.ship = window.ship;
 
 export function App() {
-  const [currentChallenge, setCurrentChallenge] = useState({} as charList);
+  const [allChallenges, setAllChallenges] = useState(JSON.parse(JSON.stringify(charList)));
+
+  const [currentChallenge, setCurrentChallenge] = useState({} as CharList);
   const [newChallenges, setNewChallenges] = useState(JSON.parse(JSON.stringify(charList)));
-  const [oldChallenges, setOldChallenges] = useState(Array<charList>);
+  const [oldChallenges, setOldChallenges] = useState([] as Array<CharList>);
   const [isFlipped, setFlipped] = useState(false);
 
   const handleNext = () => {
@@ -18,7 +22,7 @@ export function App() {
     if (newChallenges.length === 1) {
       setCurrentChallenge(newChallenges[0]);
       setNewChallenges(JSON.parse(JSON.stringify(charList)));
-      setOldChallenges([] as Array<charList>);
+      setOldChallenges([] as Array<CharList>);
       return;
     }
     const index = Math.floor(Math.random() * newChallenges.length);
