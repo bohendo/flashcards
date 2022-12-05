@@ -29,7 +29,8 @@ const sortByDifficulty = (deck: Deck): Deck => {
     if (!groupedByDif[dif]) groupedByDif[dif] = [];
     groupedByDif[dif].push(deck[i]);
   }
-  const difficulties = Object.keys(groupedByDif).sort((a, b) => parseInt(b) - parseInt(a));
+  const difficulties = Object.keys(groupedByDif).sort((a, b) => parseInt(a) - parseInt(b));
+  console.log(difficulties);
   const sorted = [] as Deck;
   for (let i = 0; i < difficulties.length; i++) {
     const difficulty = difficulties[i];
@@ -54,7 +55,7 @@ export const App = () => {
   const [isFlipped, setFlipped] = useState(false);
 
   useEffect(() => {
-    const newDeck = sortByDifficulty(getRuneDeck()).slice(0, 16);
+    const newDeck = sortByDifficulty(getMyDeck()).slice(0, 16);
     console.log(`Sorted deck:`, newDeck);
     setCurrentDeck(newDeck);
     setCurrentCard(0);
@@ -81,7 +82,7 @@ export const App = () => {
     const newDiff = currentDeck[currentCard].difficulty + diffDiff;
     const newDeck = [
       ...currentDeck.slice(0, currentCard),
-      { ...currentCard, difficulty: newDiff },
+      { ...currentDeck[currentCard], difficulty: newDiff },
       ...currentDeck.slice(currentCard + 1)
     ];
     setMyDeck(newDeck);
