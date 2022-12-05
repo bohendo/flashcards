@@ -29,7 +29,7 @@ const sortByDifficulty = (deck: Deck): Deck => {
     if (!groupedByDif[dif]) groupedByDif[dif] = [];
     groupedByDif[dif].push(deck[i]);
   }
-  const difficulties = Object.keys(groupedByDif).sort((a, b) => parseInt(a) - parseInt(b));
+  const difficulties = Object.keys(groupedByDif).sort((a, b) => parseInt(b) - parseInt(a));
   console.log(difficulties);
   const sorted = [] as Deck;
   for (let i = 0; i < difficulties.length; i++) {
