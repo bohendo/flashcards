@@ -40,7 +40,8 @@ const sortByDifficulty = (deck: Deck): Deck => {
 };
 
 const getMyDeck = (): Deck => {
-  return JSON.parse((localStorage.getItem(HOON_DECK)) as Deck) || getRuneDeck();
+  const savedDeck = localStorage.getItem(HOON_DECK);
+  return savedDeck ? (JSON.parse(savedDeck) as Deck) : getRuneDeck();
 };
 
 const setMyDeck = (deck: Deck): void => {

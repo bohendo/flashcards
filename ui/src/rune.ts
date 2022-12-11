@@ -1,20 +1,10 @@
 import * as eth from "ethers";
 
-import { Deck } from "./types";
+import { applyColors } from "./cards";
+import { Deck, DeckData } from "./types";
 
-const getColor = (key: string): string => {
-  const seed = eth.utils.keccak256(eth.utils.toUtf8Bytes(key)); // use hash for deterministic randomness
-  const prns = seed.substring(2).match(/.{1,20}/g); // split hash into a few random hex strings
-  if (!prns) throw new Error(`Invalid random seed: ${seed}`); // throw if keccak output changes
-  const color = "#" + prns
-    .map(n => eth.BigNumber.from("0x" + n)) // convert each pseudo-random number info a BigNumber
-    .map(n => n.mod(128).add(128).toHexString().substring(2)) // convert to random hex between 80 and ff
-    .join(""); // compose the full hex color string
-  // console.log(`Color for key "${key}" = ${color}`);
-  return color;
-}
+export const getRuneDeck = (): Deck => applyColors(JSON.parse(JSON.stringify([
 
-export const getRuneDeck = () => (JSON.parse(JSON.stringify([
   {
     front: "␣",
     back: "ace",
@@ -151,9 +141,5 @@ export const getRuneDeck = () => (JSON.parse(JSON.stringify([
     front: "<",
     back: "gal",
   },
-])) as Array<{ back: string; front: string; }>).map(card => ({
-  front: card.front,
-  back: card.back,
-  color: getColor(card.front),
-  difficulty: 100,
-})) as Deck;
+
+])) as DeckData)
