@@ -17,7 +17,8 @@ const getColor = (key: string): string => {
 export const applyColors = (deck: DeckData | Deck): Deck =>
   deck.map((card: Card | CardData) => ({
     front: card.front,
-    back: card.back,
+    backTitle: card.backTitle,
+    backDescription: card.backDescription,
     color: (card as Card).color || getColor(card.front),
     difficulty: (card as Card).difficulty || 100,
   })) as Deck;

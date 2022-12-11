@@ -9,20 +9,19 @@ import { Card, Deck } from './types';
 const api = new Urbit('', '', window.desk);
 api.ship = window.ship;
 
-const shuffle = (deck: Deck): Deck => {
-  const shuffled = [...deck];
-  for (let i = 0; i < shuffled.length; i++) {
-    const r = Math.floor(Math.random() * shuffled.length);
-    const tmp = shuffled[i]
-    shuffled[i] = shuffled[r]
-    shuffled[r] = tmp;
-  }
-  return shuffled;
-};
-
 // sorted by decreasing difficulty
 // ties are randomized
-const sortByDifficulty = (deck: Deck): Deck => {
+const shuffleByDifficulty = (deck: Deck): Deck => {
+  const shuffle = (deck: Deck): Deck => {
+    const shuffled = [...deck];
+    for (let i = 0; i < shuffled.length; i++) {
+      const r = Math.floor(Math.random() * shuffled.length);
+      const tmp = shuffled[i]
+      shuffled[i] = shuffled[r]
+      shuffled[r] = tmp;
+    }
+    return shuffled;
+  };
   const groupedByDif = {} as any;
   for (let i = 0; i < deck.length; i++) {
     const dif = deck[i].difficulty.toString();
@@ -37,6 +36,12 @@ const sortByDifficulty = (deck: Deck): Deck => {
     sorted.push(...shuffle(groupedByDif[difficulty]));
   }
   return sorted;
+};
+
+// sorted by decreasing difficulty
+// ties are provided in the same order as in the original deck
+const sortByDifficulty = (deck: Deck): Deck => {
+  return deck.sort((c1, c2) => c2.difficulty - c1.difficulty);
 };
 
 const getMyDeck = (): Deck => {
