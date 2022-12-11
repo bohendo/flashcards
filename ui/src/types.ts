@@ -1,7 +1,7 @@
 
 export interface Card {
-  name: string,
-  character: string,
+  front: string,
+  back: string,
   color: string
 }
 

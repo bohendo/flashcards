@@ -68,7 +68,7 @@ export const CharTile = (props: {
         </div>
         <div className="flex items-center justify-center m-5">
           <h1 className="text-3xl font-bold">
-            {card.character}
+            {card.front}
           </h1>
         </div>
       </div>
@@ -84,7 +84,7 @@ export const CharTile = (props: {
         </div>
         <div className="flex items-center justify-center mt-5">
           <h1 className="text-3xl font-bold">
-            {card.name}
+            {card.back}
           </h1>
         </div>
       </div>
