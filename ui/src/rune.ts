@@ -674,19 +674,19 @@ export const getRuneDeck = (): Deck => applyColors(JSON.parse(JSON.stringify([
   },
 
   {
-    front: "$?"
+    front: "$?",
     backTitle: "bucwut",
     backDescription: "form a type from a union of other types",
   },
 
   {
-    front: "|?"
+    front: "|?",
     backTitle: "barwut",
     backDescription: "produce a lead trap",
   },
 
   {
-    front: "$~"
+    front: "$~",
     backTitle: "bucsig",
     backDescription: "define a custom type default value",
   },

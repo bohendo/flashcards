@@ -1,7 +1,8 @@
 
 export interface CardData {
   front: string,
-  back: string,
+  backTitle: string,
+  backDescription: string,
 }
 
 export type DeckData = Array<CardData>;
