@@ -5,141 +5,303 @@ import { Deck, DeckData } from "./types";
 
 export const getRuneDeck = (): Deck => applyColors(JSON.parse(JSON.stringify([
 
+  // Simple character names
   {
     front: "␣",
-    back: "ace",
+    backTitle: "ace",
+    backDescription: "",
   },
-  {
-    front: "|",
-    back: "bar",
-  },
-  {
-    front: "\\",
-    back: "bas",
-  },
-  {
-    front: "$",
-    back: "buc",
-  },
-  {
-    front: "_",
-    back: "cab",
-  },
-  {
-    front: "%",
-    back: "cen",
-  },
-  {
-    front: ":",
-    back: "col",
-  },
-  {
-    front: ",",
-    back: "com",
-  },
-  {
-    front: "\"",
-    back: "doq",
-  },
-  {
-    front: ".",
-    back: "dot",
-  },
-  {
-    front: "/",
-    back: "fas",
-  },
-  {
-    front: ")",
-    back: "par",
-  },
+
   {
     front: "␣␣, \\n",
-    back: "gap",
+    backTitle: "gap",
+    backDescription: "",
   },
+
   {
-    front: ">",
-    back: "gar",
+    front: "|",
+    backTitle: "bar",
+    backDescription: "rune prefix for core expressions",
   },
+
   {
-    front: "#",
-    back: "hax",
+    front: "$",
+    backTitle: "buc",
+    backDescription: "rune prefix for structures",
   },
+
   {
-    front: "-",
-    back: "hep",
+    front: "%",
+    backTitle: "cen",
+    backDescription: "rune prefix for calls and samples",
   },
+
   {
-    front: "{",
-    back: "kel",
+    front: ":",
+    backTitle: "col",
+    backDescription: "rune prefix for cells",
   },
+
   {
-    front: "}",
-    back: "ker",
+    front: ".",
+    backTitle: "dot",
+    backDescription: "rune prefix for nock evaluations",
   },
+
   {
     front: "^",
-    back: "ket",
+    backTitle: "ket",
+    backDescription: "rune prefix for type casting",
   },
-  {
-    front: "+",
-    back: "lus",
-  },
-  {
-    front: ";",
-    back: "mic",
-  },
-  {
-    front: "(",
-    back: "pal",
-  },
-  {
-    front: "&",
-    back: "pam",
-  },
-  {
-    front: "@",
-    back: "pat",
-  },
-  {
-    front: "[",
-    back: "sel",
-  },
-  {
-    front: "]",
-    back: "ser",
-  },
+
   {
     front: "~",
-    back: "sig",
+    backTitle: "sig",
+    backDescription: "rune prefix for interpreter hints",
   },
+
   {
-    front: "'",
-    back: "soq",
+    front: ";",
+    backTitle: "mic",
+    backDescription: "rune prefix for macros",
   },
-  {
-    front: "*",
-    back: "tar",
-  },
-  {
-    front: "`",
-    back: "tic",
-  },
+
   {
     front: "=",
-    back: "tis",
+    backTitle: "tis",
+    backDescription: "rune prefix for subject modification",
   },
+
   {
     front: "?",
-    back: "wut",
+    backTitle: "wut",
+    backDescription: "rune prefix for conditionals",
   },
+
   {
     front: "!",
-    back: "zap",
+    backTitle: "zap",
+    backDescription: "rune prefix for wildcards",
   },
+
+  {
+    front: "/",
+    backTitle: "fas",
+    backDescription: "rune prefix for build operations eg imports",
+  },
+
+  {
+    front: "+",
+    backTitle: "lus",
+    backDescription: "rune prefix for arm definitions",
+  },
+
+  {
+    front: "-",
+    backTitle: "hep",
+    backDescription: "",
+  },
+
+  {
+    front: "\\",
+    backTitle: "bas",
+    backDescription: "",
+  },
+
+  {
+    front: "_",
+    backTitle: "cab",
+    backDescription: "",
+  },
+
+  {
+    front: ",",
+    backTitle: "com",
+    backDescription: "",
+  },
+
+  {
+    front: "\"",
+    backTitle: "doq",
+    backDescription: "",
+  },
+
+  {
+    front: ")",
+    backTitle: "par",
+    backDescription: "",
+  },
+
+  {
+    front: ">",
+    backTitle: "gar",
+    backDescription: "",
+  },
+
+  {
+    front: "#",
+    backTitle: "hax",
+    backDescription: "",
+  },
+
+  {
+    front: "{",
+    backTitle: "kel",
+    backDescription: "",
+  },
+
+  {
+    front: "}",
+    backTitle: "ker",
+    backDescription: "",
+  },
+
+  {
+    front: "(",
+    backTitle: "pal",
+    backDescription: "",
+  },
+
+  {
+    front: "&",
+    backTitle: "pam",
+    backDescription: "",
+  },
+
+  {
+    front: "@",
+    backTitle: "pat",
+    backDescription: "",
+  },
+
+  {
+    front: "[",
+    backTitle: "sel",
+    backDescription: "",
+  },
+
+  {
+    front: "]",
+    backTitle: "ser",
+    backDescription: "",
+  },
+
+  {
+    front: "'",
+    backTitle: "soq",
+    backDescription: "",
+  },
+
+  {
+    front: "*",
+    backTitle: "tar",
+    backDescription: "",
+  },
+
+  {
+    front: "`",
+    backTitle: "tic",
+    backDescription: "",
+  },
+
   {
     front: "<",
-    back: "gal",
+    backTitle: "gal",
+    backDescription: "",
+  },
+
+  // Urbit Vocab
+
+  {
+    front: "bridge",
+    backTitle: "Azimuth client",
+    backDescription: "interface to the urbit id registry",
+  },
+
+  {
+    front: "mold",
+    backTitle: "types",
+    backDescription: "type definition + a function for coercing data to the type",
+  },
+
+  {
+    front: "core",
+    backTitle: "cell of battery + payload",
+    backDescription: "similar to methods + data of OOP objects",
+  },
+
+  {
+    front: "cell",
+    backTitle: "tuple",
+    backDescription: "ordered pair of nouns eg [12 23]",
+  },
+
+  {
+    front: "wing",
+    backTitle: "limb aka arm or leg",
+    backDescription: "piece of data or code that can be referenced in the subject",
+  },
+
+  {
+    front: "arm",
+    backTitle: "named hoon expression",
+    backDescription: "",
+  },
+
+  {
+    front: "leg",
+    backTitle: "named data",
+    backDescription: "",
+  },
+
+  // Hoon Runes
+
+  {
+    front: "::",
+    backTitle: "Comment",
+    backDescription: "for in-line code documentation",
+  },
+
+  {
+    front: "=,",
+    backTitle: "tiscom",
+    backDescription: "expose namespace & define a bridge",
+  },
+
+  {
+    front: "|%",
+    backTitle: "barcen",
+    backDescription: "produce a core aka battery + payload",
+  },
+
+  {
+    front: "++",
+    backTitle: "luslus",
+    backDescription: "produce a normal arm",
+  },
+
+  {
+    front: "|=",
+    backTitle: "bartis",
+    backDescription: "produce a dry gate, given ",
+  },
+
+  {
+    front: "%+",
+    backTitle: "cenlus",
+    backDescription: "execute a function",
+  },
+
+  {
+    front: "=/",
+    backTitle: "tisfas",
+    backDescription: "combined a named noun with the subject",
+  },
+
+  {
+    front: "^-",
+    backTitle: "kethep",
+    backDescription: "cast to type according to explicit label",
   },
 
 ])) as DeckData)
