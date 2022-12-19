@@ -13,6 +13,7 @@ import { Card, Deck } from './types';
 const api = new Urbit('', '', window.desk);
 api.ship = window.ship;
 
+const runeDeck = getRuneDeck();
 // sorted by decreasing difficulty
 // ties are randomized
 const shuffleByDifficulty = (deck: Deck): Deck => {
@@ -42,6 +43,18 @@ const shuffleByDifficulty = (deck: Deck): Deck => {
   return sorted;
 };
 
+const selectRandomWithBias = (deck: Deck): number => {
+  const bias =  Math.random() * 11;
+  if (bias < 1) {
+    // Select next card with difficult in [ minDiff, minDiff + floor((maxDiff - minDiff)/3) ]
+  } else if (bias < 4) {
+    // Select next card with difficulty in [minDiff + floor((maxDiff - minDiff)/3), minDiff + floor(2*(maxDiff - minDiff)/3) ]
+  } else {
+    // Select next card with difficulty > minDiff + floor(2*(maxDiff - minDiff)/3)
+  }
+  return 0;
+}
+
 // sorted by decreasing difficulty
 // ties are provided in the same order as in the original deck
 const sortByDifficulty = (deck: Deck): Deck => {
@@ -50,30 +63,33 @@ const sortByDifficulty = (deck: Deck): Deck => {
 
 const getMyDeck = (): Deck => {
   const savedDeck = localStorage.getItem(HOON_DECK);
-  return savedDeck ? (JSON.parse(savedDeck) as Deck) : getRuneDeck();
+  return savedDeck ? (JSON.parse(savedDeck) as Deck) : runeDeck.slice(0,16);
 };
 
 const setMyDeck = (deck: Deck): void => {
   return localStorage.setItem(HOON_DECK, JSON.stringify(deck || []));
 };
 
-const resetMyDeck = () => {
-  localStorage.setItem(HOON_DECK, JSON.stringify(getRuneDeck()));
-}
-
 const HOON_DECK = "HOON_DECK"
 
 export const App = () => {
   const [currentCard, setCurrentCard] = useState(0);
   const [currentDeck, setCurrentDeck] = useState(getMyDeck());
+  // const [viewedIndex, setViewedIndex] = useState(0);
   const [isFlipped, setFlipped] = useState(false);
 
   useEffect(() => {
-    const newDeck = sortByDifficulty(getMyDeck()).slice(0, 16);
+    const newDeck = sortByDifficulty(getMyDeck());
     console.log(`Sorted deck:`, newDeck);
     setCurrentDeck(newDeck);
     setCurrentCard(0);
   }, []);
+
+  const resetMyDeck = () => {
+    localStorage.setItem(HOON_DECK, "");
+    setCurrentDeck(getMyDeck());
+    setCurrentCard(0);
+  }
 
   const handleNext = () => {
     setFlipped(false);
@@ -95,12 +111,17 @@ export const App = () => {
       : +2; // Hard
     let newDiff = currentDeck[currentCard].difficulty + diffDiff;
     newDiff = newDiff > 100 ? 100 : newDiff < 0 ? 0 : newDiff;
-    const newDeck = [
+    const newDeck = sortByDifficulty([
       ...currentDeck.slice(0, currentCard),
       { ...currentDeck[currentCard], difficulty: newDiff },
       ...currentDeck.slice(currentCard + 1)
-    ];
+    ]);
+    if (difficulty === Difficulty.Easy || difficulty === Difficulty.Medium
+      && currentDeck.length < runeDeck.length) {
+      newDeck.unshift(runeDeck[currentDeck.length]);
+    }
     console.log(`Updated difficulty deck:`, newDeck);
+    console.log(`OG deck:`, runeDeck);
     setMyDeck(newDeck);
     setCurrentDeck(newDeck);
     handleNext();
