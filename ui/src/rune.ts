@@ -358,7 +358,7 @@ export const getRuneDeck = (): Deck => applyColors(JSON.parse(JSON.stringify([
   {
     front: "|-",
     backTitle: "barhep",
-    backDescription: "produce a trap (core with one arm) and evaluate it",
+    backDescription: "produce a trap aka loop (core with one arm) and evaluate it",
   },
 
   {
