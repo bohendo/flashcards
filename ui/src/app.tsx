@@ -45,14 +45,55 @@ const shuffleByDifficulty = (deck: Deck): Deck => {
 
 const selectRandomWithBias = (deck: Deck): number => {
   const bias =  Math.random() * 11;
-  if (bias < 1) {
+  const maxDiff = deck[0].difficulty;
+  const minDiff = deck[deck.length - 1].difficulty;
+  const diffDiff = maxDiff - minDiff;
+  let rangeMax, rangeMin, i;
+
+  if (bias < 2) {
     // Select next card with difficult in [ minDiff, minDiff + floor((maxDiff - minDiff)/3) ]
-  } else if (bias < 4) {
+
+    rangeMax = rangeMin = deck.length - 1;
+    for (i = rangeMax - 1; i > 0; i--) {
+      if (deck[i].difficulty <= minDiff + Math.floor(diffDiff/3))
+        rangeMin--;
+      else
+        break;
+    }
+  } else if (bias < 6) {
     // Select next card with difficulty in [minDiff + floor((maxDiff - minDiff)/3), minDiff + floor(2*(maxDiff - minDiff)/3) ]
+
+    rangeMax = rangeMin = deck.length - 2;
+    for (i = rangeMax; i > 0; i--) {
+      if (deck[i].difficulty >= minDiff + Math.floor(diffDiff/3)) {
+        rangeMax = rangeMin = i;
+        break
+      }
+    }
+    for (--i; i > 0; i--) {
+      if (deck[i].difficulty <= minDiff + Math.floor(2*diffDiff/3))
+        rangeMin--;
+      else
+        break;
+    }
+
   } else {
     // Select next card with difficulty > minDiff + floor(2*(maxDiff - minDiff)/3)
+
+    rangeMin = 0;
+    rangeMax = 1;
+    for (i = 1; i < deck.length; i++) {
+      if (deck[i].difficulty >= minDiff + Math.floor(2*diffDiff/3))
+        rangeMax++
+      else
+        break;
+    }
   }
-  return 0;
+
+  console.log(`Bias: ${bias} Selecting from range [${rangeMin},${rangeMax}]`)
+    
+  if (rangeMax === rangeMin) return rangeMax;
+  return Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
 }
 
 // sorted by decreasing difficulty
@@ -93,8 +134,9 @@ export const App = () => {
 
   const handleNext = () => {
     setFlipped(false);
-    let newCard = currentCard + 1;
-    if (newCard > currentDeck.length - 1) newCard = 0; // wrap back to beginning
+    // let newCard = currentCard + 1;
+    let newCard = selectRandomWithBias(currentDeck)
+    // if (newCard > currentDeck.length - 1) newCard = 0; // wrap back to beginning
     setCurrentCard(newCard);
   }
 
@@ -121,7 +163,6 @@ export const App = () => {
       newDeck.unshift(runeDeck[currentDeck.length]);
     }
     console.log(`Updated difficulty deck:`, newDeck);
-    console.log(`OG deck:`, runeDeck);
     setMyDeck(newDeck);
     setCurrentDeck(newDeck);
     handleNext();
