@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Urbit from '@urbit/http-api';
 import { Charges, ChargeUpdateInitial, scryCharges } from '@urbit/api';
+
+import IconButton from '@mui/material/IconButton'
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+
 import { CharTile } from './components/CharTile';
 import { getRuneDeck } from './rune';
 
@@ -53,6 +57,10 @@ const setMyDeck = (deck: Deck): void => {
   return localStorage.setItem(HOON_DECK, JSON.stringify(deck || []));
 };
 
+const resetMyDeck = () => {
+  localStorage.setItem(HOON_DECK, JSON.stringify(getRuneDeck()));
+}
+
 const HOON_DECK = "HOON_DECK"
 
 export const App = () => {
@@ -85,12 +93,14 @@ export const App = () => {
     const diffDiff = difficulty === Difficulty.Easy ? -10
       : difficulty === Difficulty.Medium ? -2
       : +2; // Hard
-    const newDiff = currentDeck[currentCard].difficulty + diffDiff;
+    let newDiff = currentDeck[currentCard].difficulty + diffDiff;
+    newDiff = newDiff > 100 ? 100 : newDiff < 0 ? 0 : newDiff;
     const newDeck = [
       ...currentDeck.slice(0, currentCard),
       { ...currentDeck[currentCard], difficulty: newDiff },
       ...currentDeck.slice(currentCard + 1)
     ];
+    console.log(`Updated difficulty deck:`, newDeck);
     setMyDeck(newDeck);
     setCurrentDeck(newDeck);
     handleNext();
@@ -99,6 +109,11 @@ export const App = () => {
   return (
     <main className="flex items-center justify-center min-h-screen">
       <div className="block justify-center items-center max-w-md space-y-6 py-20">
+        <IconButton
+          onClick={() => resetMyDeck()}
+        >
+          <RestartAltIcon />
+        </IconButton>
         <h1 className="text-3xl font-bold">Welcome to flashcards</h1>
         <CharTile card={currentDeck[currentCard]} isFlipped={isFlipped} setFlipped={setFlipped} />
         {
