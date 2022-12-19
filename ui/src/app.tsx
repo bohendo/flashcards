@@ -158,8 +158,7 @@ export const App = () => {
       { ...currentDeck[currentCard], difficulty: newDiff },
       ...currentDeck.slice(currentCard + 1)
     ]);
-    if (difficulty === Difficulty.Easy || difficulty === Difficulty.Medium
-      && currentDeck.length < runeDeck.length) {
+    if (difficulty === Difficulty.Easy && currentDeck.length < runeDeck.length) {
       newDeck.unshift(runeDeck[currentDeck.length]);
     }
     console.log(`Updated difficulty deck:`, newDeck);
