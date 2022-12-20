@@ -44,11 +44,12 @@ const shuffleByDifficulty = (deck: Deck): Deck => {
 };
 
 const selectRandomWithBias = (deck: Deck): number => {
-  const bias =  Math.random() * 11;
+  const bias =  Math.random() * 10;
   const maxDiff = deck[0].difficulty;
   const minDiff = deck[deck.length - 1].difficulty;
   const diffDiff = maxDiff - minDiff;
   let rangeMax, rangeMin, i;
+  console.log(`Max diff: ${maxDiff}, min diff: ${minDiff}`);
 
   if (bias < 2) {
     // Select next card with difficult in [ minDiff, minDiff + floor((maxDiff - minDiff)/3) ]
@@ -65,9 +66,9 @@ const selectRandomWithBias = (deck: Deck): number => {
 
     rangeMax = rangeMin = deck.length - 2;
     for (i = rangeMax; i > 0; i--) {
-      if (deck[i].difficulty >= minDiff + Math.floor(diffDiff/3)) {
+      if (deck[i].difficulty > minDiff + Math.floor(diffDiff/3)) {
         rangeMax = rangeMin = i;
-        break
+        break;
       }
     }
     for (--i; i > 0; i--) {
@@ -80,10 +81,9 @@ const selectRandomWithBias = (deck: Deck): number => {
   } else {
     // Select next card with difficulty > minDiff + floor(2*(maxDiff - minDiff)/3)
 
-    rangeMin = 0;
-    rangeMax = 1;
+    rangeMin = rangeMax = 0;
     for (i = 1; i < deck.length; i++) {
-      if (deck[i].difficulty >= minDiff + Math.floor(2*diffDiff/3))
+      if (deck[i].difficulty > minDiff + Math.floor(2*diffDiff/3))
         rangeMax++
       else
         break;
@@ -123,7 +123,7 @@ export const App = () => {
     const newDeck = sortByDifficulty(getMyDeck());
     console.log(`Sorted deck:`, newDeck);
     setCurrentDeck(newDeck);
-    setCurrentCard(0);
+    setCurrentCard(selectRandomWithBias(newDeck));
   }, []);
 
   const resetMyDeck = () => {
