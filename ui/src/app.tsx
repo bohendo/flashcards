@@ -3,6 +3,8 @@ import Urbit from '@urbit/http-api';
 import { Charges, ChargeUpdateInitial, scryCharges } from '@urbit/api';
 
 import IconButton from '@mui/material/IconButton'
+import { Button } from '@mui/material';
+import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import { CharTile } from './components/CharTile';
@@ -44,14 +46,17 @@ const shuffleByDifficulty = (deck: Deck): Deck => {
 };
 
 const selectRandomWithBias = (deck: Deck): number => {
-  const bias =  Math.random() * 10;
   const maxDiff = deck[0].difficulty;
   const minDiff = deck[deck.length - 1].difficulty;
+  if (maxDiff === minDiff) {
+    return Math.floor(Math.random() * deck.length);
+  }
+  const bias =  Math.random() * 10;
   const diffDiff = maxDiff - minDiff;
   let rangeMax, rangeMin, i;
   console.log(`Max diff: ${maxDiff}, min diff: ${minDiff}`);
 
-  if (bias < 2) {
+  if (bias < 1) {
     // Select next card with difficult in [ minDiff, minDiff + floor((maxDiff - minDiff)/3) ]
 
     rangeMax = rangeMin = deck.length - 1;
@@ -61,7 +66,7 @@ const selectRandomWithBias = (deck: Deck): number => {
       else
         break;
     }
-  } else if (bias < 6) {
+  } else if (bias < 4) {
     // Select next card with difficulty in [minDiff + floor((maxDiff - minDiff)/3), minDiff + floor(2*(maxDiff - minDiff)/3) ]
 
     rangeMax = rangeMin = deck.length - 2;
@@ -158,7 +163,8 @@ export const App = () => {
       { ...currentDeck[currentCard], difficulty: newDiff },
       ...currentDeck.slice(currentCard + 1)
     ]);
-    if (difficulty === Difficulty.Easy && currentDeck.length < runeDeck.length) {
+    if (difficulty === Difficulty.Easy && newDiff > 60 && newDiff <= 70
+     && currentDeck.length < runeDeck.length) {
       newDeck.unshift(runeDeck[currentDeck.length]);
     }
     console.log(`Updated difficulty deck:`, newDeck);
@@ -170,11 +176,12 @@ export const App = () => {
   return (
     <main className="flex items-center justify-center min-h-screen">
       <div className="block justify-center items-center max-w-md space-y-6 py-20">
-        <IconButton
+        <Button
           onClick={() => resetMyDeck()}
+          endIcon={<CleaningServicesIcon />}
         >
-          <RestartAltIcon />
-        </IconButton>
+          Reset
+        </Button>
         <h1 className="text-3xl font-bold">Welcome to flashcards</h1>
         <CharTile card={currentDeck[currentCard]} isFlipped={isFlipped} setFlipped={setFlipped} />
         {
