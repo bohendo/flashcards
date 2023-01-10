@@ -68,7 +68,6 @@ Note: the dev server runs on port 3000 but, while deploying, we'll be talking di
   - That line should look something like this when you're done: `glob-http+['https://myblog.com/ipfs/Qmabc123' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]`
   - Update info & other stuff if needed
 - bash: `cp -f desk/* data/zod/flashcards/` to copy our updated docket into the prod desk
-- bash: `rsync -avL --delete ui/dist/ data/zod/flashcards/flashcards` to copy prod js bundle into the prod desk
 - dojo: `|commit %flashcards` to load fs updates into urbit
 - dojo: `|install our %flashcards` to activate this desk as an app (only needed once, it'll auto update next time)
 - browser: visit your homepage at http://localhost:8080 and explore your newly installed app
