@@ -30,11 +30,11 @@ const shuffle = (deck: Deck): Deck => {
 };
 
 const selectRandomWithBias = (deck: Deck): number => {
-  const scale = n => n ** 2;
-  const maxDiff = deck.reduce((cum, cur) => cur < cum ? cum : cur, 0);
-  const minDiff = deck.reduce((cum, cur) => cur > cum ? cum : cur, 100);
-  const sqTotal = deck.reduce((cum, cur) => cum + scale(cur.difficulty), 0);
-  const randomInt = Math.floor(Math.random(sqTotal) + 0.5);
+  const scale = (n: number): number => n ** 2;
+  const maxDiff = deck.map(c => c.difficulty).reduce((cum, cur) => cur < cum ? cum : cur, 0);
+  const minDiff = deck.map(c => c.difficulty).reduce((cum, cur) => cur > cum ? cum : cur, 100);
+  const sqTotal = deck.map(c => c.difficulty).reduce((cum, cur) => cum + scale(cur), 0);
+  const randomInt = Math.floor((Math.random() * sqTotal) + 0.5);
 
   let runningTot = 0;
   for (let i = 0; i < deck.length; i++) {
