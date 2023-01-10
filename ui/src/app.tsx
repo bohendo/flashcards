@@ -18,87 +18,31 @@ api.ship = window.ship;
 const runeDeck = getRuneDeck();
 // sorted by decreasing difficulty
 // ties are randomized
-const shuffleByDifficulty = (deck: Deck): Deck => {
-  const shuffle = (deck: Deck): Deck => {
-    const shuffled = [...deck];
-    for (let i = 0; i < shuffled.length; i++) {
-      const r = Math.floor(Math.random() * shuffled.length);
-      const tmp = shuffled[i]
-      shuffled[i] = shuffled[r]
-      shuffled[r] = tmp;
-    }
-    return shuffled;
-  };
-  const groupedByDif = {} as any;
-  for (let i = 0; i < deck.length; i++) {
-    const dif = deck[i].difficulty.toString();
-    if (!groupedByDif[dif]) groupedByDif[dif] = [];
-    groupedByDif[dif].push(deck[i]);
+const shuffle = (deck: Deck): Deck => {
+  const shuffled = [...deck];
+  for (let i = 0; i < shuffled.length; i++) {
+    const r = Math.floor(Math.random() * shuffled.length);
+    const tmp = shuffled[i]
+    shuffled[i] = shuffled[r]
+    shuffled[r] = tmp;
   }
-  const difficulties = Object.keys(groupedByDif).sort((a, b) => parseInt(b) - parseInt(a));
-  console.log(difficulties);
-  const sorted = [] as Deck;
-  for (let i = 0; i < difficulties.length; i++) {
-    const difficulty = difficulties[i];
-    sorted.push(...shuffle(groupedByDif[difficulty]));
-  }
-  return sorted;
+  return shuffled;
 };
 
 const selectRandomWithBias = (deck: Deck): number => {
-  const maxDiff = deck[0].difficulty;
-  const minDiff = deck[deck.length - 1].difficulty;
-  if (maxDiff === minDiff) {
-    return Math.floor(Math.random() * deck.length);
-  }
-  const bias =  Math.random() * 10;
-  const diffDiff = maxDiff - minDiff;
-  let rangeMax, rangeMin, i;
-  console.log(`Max diff: ${maxDiff}, min diff: ${minDiff}`);
+  const scale = n => n ** 2;
+  const maxDiff = deck.reduce((cum, cur) => cur < cum ? cum : cur, 0);
+  const minDiff = deck.reduce((cum, cur) => cur > cum ? cum : cur, 100);
+  const sqTotal = deck.reduce((cum, cur) => cum + scale(cur.difficulty), 0);
+  const randomInt = Math.floor(Math.random(sqTotal) + 0.5);
 
-  if (bias < 1) {
-    // Select next card with difficult in [ minDiff, minDiff + floor((maxDiff - minDiff)/3) ]
-
-    rangeMax = rangeMin = deck.length - 1;
-    for (i = rangeMax - 1; i > 0; i--) {
-      if (deck[i].difficulty <= minDiff + Math.floor(diffDiff/3))
-        rangeMin--;
-      else
-        break;
-    }
-  } else if (bias < 4) {
-    // Select next card with difficulty in [minDiff + floor((maxDiff - minDiff)/3), minDiff + floor(2*(maxDiff - minDiff)/3) ]
-
-    rangeMax = rangeMin = deck.length - 2;
-    for (i = rangeMax; i > 0; i--) {
-      if (deck[i].difficulty > minDiff + Math.floor(diffDiff/3)) {
-        rangeMax = rangeMin = i;
-        break;
-      }
-    }
-    for (--i; i > 0; i--) {
-      if (deck[i].difficulty <= minDiff + Math.floor(2*diffDiff/3))
-        rangeMin--;
-      else
-        break;
-    }
-
-  } else {
-    // Select next card with difficulty > minDiff + floor(2*(maxDiff - minDiff)/3)
-
-    rangeMin = rangeMax = 0;
-    for (i = 1; i < deck.length; i++) {
-      if (deck[i].difficulty > minDiff + Math.floor(2*diffDiff/3))
-        rangeMax++
-      else
-        break;
-    }
+  let runningTot = 0;
+  for (let i = 0; i < deck.length; i++) {
+    runningTot += scale(deck[i].difficulty);
+    if (runningTot >= randomInt) return i
   }
 
-  console.log(`Bias: ${bias} Selecting from range [${rangeMin},${rangeMax}]`)
-    
-  if (rangeMax === rangeMin) return rangeMax;
-  return Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
+  throw new Error(`Error while selecing random card with bias: no card selected`);
 }
 
 // sorted by decreasing difficulty
