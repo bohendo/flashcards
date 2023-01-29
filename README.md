@@ -60,16 +60,18 @@ Note: the dev server runs on port 3000 but, while deploying, we'll be talking di
 
 ### To deploy glob to urbit ship
 
-- bash: `bash publish.sh data/zod/.urb/put/glob-0v1.hgamp.m7c2c.bomag.81l5r.d71h6.glob $BLOG_URL/ipfs` to upload the glob to ipfs
+- dev bash: `bash publish.sh data/zod/.urb/put/glob-0v1.hgamp.m7c2c.bomag.81l5r.d71h6.glob $BLOG_URL/ipfs` to upload the glob to ipfs
   - where `$BLOG_URL` can include a username and password eg `https://admin:password@myblog.com`
   - change the glob name to one from your own `zod/.urb/put` dir
-- bash: `vim desk/desk.docket-0`
+- dev bash: `vim desk/desk.docket-0`
   - Both the full URL and the hash of the `glob-http` key should be updated to match the glob we just created
   - That line should look something like this when you're done: `glob-http+['https://myblog.com/ipfs/Qmabc123' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]`
   - Update info & other stuff if needed
-- bash: `cp -f desk/* data/zod/flashcards/` to copy our updated docket into the prod desk
-- dojo: `|commit %flashcards` to load fs updates into urbit
-- dojo: `|install our %flashcards` to activate this desk as an app (only needed once, it'll auto update next time)
+- dev bash: `git commit --all -m "update deployment"` to save the updated deployment info
+- dev bash: `ssh://blog:/home/admin/flashcards/` or similar to push updated deployment info to remote server
+- prod bash: `cp -f desk/* data/zod/flashcards/` to copy our updated docket into the prod desk
+- prod dojo: `|commit %flashcards` to load fs updates into urbit
+- prod dojo: `|install our %flashcards` to activate this desk as an app (only needed once, it'll auto update next time)
 - browser: visit your homepage at http://localhost:8080 and explore your newly installed app
 
 [Other docs](https://developers.urbit.org/guides/core/app-school-full-stack/8-desk) to check out if the above doesn't work..
