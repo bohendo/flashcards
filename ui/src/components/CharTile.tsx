@@ -10,7 +10,7 @@ export const CharTile = (props: {
 
   const { card, isFlipped, setFlipped } = props;
 
-  console.log(`Rendering card:`, card);
+  console.log(`Rendering ${isFlipped ? "back" : "front"} of card "${card.front}" w difficulty ${card.difficulty}`);
 
   const frontRotateX = `rotateX(${ isFlipped ? 180 : 0 }deg)`;
   const backRotateX = `rotateX(${ isFlipped ? 0 : -180 }deg)`;

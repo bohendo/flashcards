@@ -12,7 +12,7 @@
 - iron vs _ gates?
 - traps vs lead trap?
 - zinc vs iron cores?
-- what is sail? A special type of macros?
+- what is sail? A special type of macro?
 - what is a face?
 - sur: directory for..?
 - lib: directory for..?
