@@ -30,7 +30,9 @@ cd "$data" || exit 1
 if [[ -d "$fresh" ]]
 then
   if [[ ! -d "$name" ]]
-  then cp -r "$fresh" "$name"
+  then
+    echo "Copying fresh zod data from $fresh to $name"
+    cp -r "$fresh" "$name"
   elif [[ "$reset" == "true" ]]
   then
     echo "Deleting all data for $name"
@@ -41,7 +43,8 @@ then
   $urbit "$name"
 else
   echo
-  echo "Booting a new urbit to use as a quick-start freshzod.."
+  echo "No data found at $(realpath $fresh)"
+  echo "Booting a new urbit to use as a quick-start $name.."
   echo "Once this ship boots, run the following commands to pre-configure the fresh data dir"
   echo "~zod:dojo> |mount %base" # generic boilerplate (like what you get after `git init`)
   echo "~zod:dojo> |mount %garden" # this desk serves landscape so the server I guess?
