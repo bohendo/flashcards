@@ -110,7 +110,7 @@ const setMyDeck = (deck?: Deck): void => {
 };
 
 const deckToString = (deck: Deck): string =>
-  `"${deck?.length ? deck.map(c => c.front).join('",  "') : ""}"`;
+  `"${deck?.length ? deck.map(c => c.front).join('", "') : ""}"`;
 
 export const App = () => {
   const [currentCard, setCurrentCard] = useState(0);

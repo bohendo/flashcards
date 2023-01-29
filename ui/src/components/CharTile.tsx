@@ -55,38 +55,32 @@ export const CharTile = (props: {
   return card ? (
     <div className="relative" style={styles.flipper}>
       <div
-        className="block relative w-64 h-256 rounded-lg bg-gray-200 overflow-hidden m-5"
+        className="block relative w-64 h-256 rounded-lg bg-gray-200 overflow-auto m-4"
         style={styles.front}
         onClick={()=> setFlipped(!isFlipped)}
       >
 
-        <div className="flex items-center justify-center m-5">
+        <div className="flex items-center justify-center m-4">
           <h1 className="text-md font-bold">
             Character
           </h1>
         </div>
 
-        <div className="flex items-center justify-center m-5">
+        <div className="flex items-center justify-center m-4">
           <h1 className="text-7xl font-bold">
             {card.front}
           </h1>
         </div>
       </div>
       <div
-        className="block relative w-64 h-256 rounded-lg bg-gray-200 overflow-hidden"
+        className="block relative w-64 h-256 rounded-lg bg-gray-200 overflow-auto"
         style={styles.back}
         onClick={()=> setFlipped(!isFlipped)}
       >
 
-        <div className="flex items-center justify-center m-5">
-          <h1 className="text-md font-bold">
-            Name
-          </h1>
-        </div>
+        <div className="block items-center justify-center m-4">
 
-        <div className="block items-center justify-center m-5">
-
-          <div className="flex items-center justify-center m-5">
+          <div className="flex items-center justify-center m-4">
             <h1 className="text-3xl font-bold">
               {card.backTitle}
             </h1>
