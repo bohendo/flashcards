@@ -47,7 +47,7 @@ Note: the dev server runs on port 3000 but, while deploying, we'll be talking di
 
 ### Build a deployable glob
 
-- bash: `cd ui && npm install && npm run build` to install ui deps & build a prod bundle in `ui/dist` (from a 2nd terminal tab bc first one should still have dojo open)
+- bash: `(cd ui && npm install && npm run build)` to install ui deps & build a prod bundle in `ui/dist` (from a 2nd terminal tab bc first one should still have dojo open)
 - bash: `rsync -avL --delete ui/dist/ data/zod/work/flashcards` to copy prod js bundle into the urbit work desk
 - dojo: `|commit %work` to import filesystem changes into urbit, you should see new files logged in dojo
 - dojo: `=dir /=garden=` to change to the garden desk, arg to `=dir` (aka `cd`) is a 3-part `beak` (like a `path`) composed of the ship, desk, and revision (`=` for any of these three uses the default value)
