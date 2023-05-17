@@ -16,11 +16,13 @@ then
   urbit="$(realpath "$(which urbit)")";
 elif [[ -n "$(command -v docker)" ]]
 then
-  image="tloncorp/urbit:v1.12"
-  if ! grep "$image" <<<"$(docker image ls)"
+  image_name="tloncorp/vere"
+  image_version="v2.4"
+  image="$image_name:$image_version"
+  if ! grep -q "$image_version" <<<"$(docker image ls | grep "$image_name")"
   then docker image pull "$image"
   fi
-  urbit="docker run --interactive --tty --rm --name=fakezod --mount=type=bind,src=$data,dst=/urbit --publish=8080:80 $image urbit"
+  urbit="docker run --interactive --tty --rm --name=zod --mount=type=bind,src=$data,dst=/urbit --publish=8080:80 --entrypoint=urbit $image --http-port 8080 --loom 31"
 else
   echo "Neither urbit nor docker is installed, can't start a fake ship" && exit 1
 fi
@@ -32,11 +34,13 @@ then
   if [[ ! -d "$name" ]]
   then
     echo "Copying fresh zod data from $fresh to $name"
+    sudo chown -R "$(whoami)" .
     cp -r "$fresh" "$name"
   elif [[ "$reset" == "true" ]]
   then
     echo "Deleting all data for $name"
     sleep 3 # give user a sec to ctrl-c if this was a mistake
+    sudo chown -R "$(whoami)" .
     rm -rfv "$name"
     cp -r "$fresh" "$name"
   fi
